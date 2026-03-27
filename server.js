@@ -1,14 +1,12 @@
 const express = require('express');
-const cors = require('cors');
 const fetch = require('node-fetch');
-const path = require('path');
-
 const app = express();
-app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
 
-// Proxy endpoint for Anthropic API
+app.get('/', (req, res) => {
+  res.send(`YOUR HTML GOES HERE`);
+});
+
 app.post('/api/generate', async (req, res) => {
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -22,10 +20,9 @@ app.post('/api/generate', async (req, res) => {
     });
     const data = await response.json();
     res.json(data);
-  } catch (err) {
+  } catch(err) {
     res.status(500).json({ error: { message: err.message } });
   }
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Running on port ${PORT}`));
+module.exports = app;
